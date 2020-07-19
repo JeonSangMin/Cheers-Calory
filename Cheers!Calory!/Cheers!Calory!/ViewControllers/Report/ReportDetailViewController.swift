@@ -12,17 +12,10 @@ class ReportDetailViewController: UIViewController {
   
   
   // MARK: -Property
-  var breakfast = [Food]()
-  var lunch = [Food]()
-  var dinner = [Food]()
-  var snack = [Food]()
   
   private let dateView = UIView()
   private let dateLabel = UILabel()
-  private let breakfastView = ReportsDetailView(food: nil)
-  private let lunchView = ReportsDetailView(food: nil)
-  
-//  private let tableView = UITableView()
+  private let tableView = UITableView()
   
   // 얘한테 특정 날짜에 대한 식단정보가 들어있음
   // dateLabel 텍스트 설정하는 부분(60번째 줄), 아침, 점심 총 칼로리 텍스트 설정하는 부분 (106, 110번째 줄) 참고 할 것
@@ -58,8 +51,7 @@ class ReportDetailViewController: UIViewController {
   private func setUI() {
     view.addSubviews([
       dateView,
-      breakfastView,
-      lunchView,
+      tableView
     ])
     
     dateView.addSubview(dateLabel)
@@ -68,12 +60,11 @@ class ReportDetailViewController: UIViewController {
     dateLabel.textColor = .white
     dateLabel.text = dailyDetail.today
     dateLabel.textAlignment = .center
-    
-    breakfastView.configue(title: "아침", totalCalory: "\(dailyDetail.breakfastTotalCalory)")
-    lunchView.configue(title: "점심", totalCalory: "\(dailyDetail.lunchTotalCalory)")
-//    tableView.dataSource = self
-//    tableView.separatorStyle = .none
-//    tableView.register(ReprotsDetailTableViewCell.self, forCellReuseIdentifier: ReprotsDetailTableViewCell.identifier)
+   
+    tableView.dataSource = self
+    tableView.separatorStyle = .none
+    tableView.register(ReprotsDetailTableViewCell.self, forCellReuseIdentifier: ReprotsDetailTableViewCell.identifier)
+    tableView.allowsSelection = false
     
     setConstraint()
   }
@@ -91,45 +82,42 @@ class ReportDetailViewController: UIViewController {
       $0.centerX.equalToSuperview()
       $0.centerY.equalToSuperview()
     }
-    
-    breakfastView.snp.makeConstraints {
-      $0.top.equalTo(dateView.snp.bottom).offset(10)
-      $0.leading.trailing.equalToSuperview()
-      $0.height.equalToSuperview().multipliedBy(0.2)
+    tableView.snp.makeConstraints {
+      $0.top.equalTo(dateView.snp.bottom).offset(20)
+      $0.leading.trailing.bottom.equalTo(guide)
     }
-    lunchView.snp.makeConstraints {
-      $0.top.equalTo(breakfastView.snp.bottom).offset(10)
-      $0.leading.trailing.equalToSuperview()
-      $0.height.equalToSuperview().multipliedBy(0.2)
-    }
-//    tableView.snp.makeConstraints {
-//      $0.top.equalTo(dateView.snp.bottom)
-//      $0.leading.trailing.bottom.equalTo(guide)
-//    }
   }
   
 }
 
 
-//extension ReportDetailViewController: UITableViewDataSource {
-//  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//    4
-//  }
-//
-//  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//    switch indexPath.row {
-//    case 0:
-//      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
-//      cell.configue(title: "아침", totalCalory: "\(dailyDetail.breakfastTotalCalory)")
-//      return cell
-//    case 1:
-//      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
-//      cell.configue(title: "점심", totalCalory: "\(dailyDetail.lunchTotalCalory)")
-//      return cell
-//
-//    default:
-//      return UITableViewCell()
-//
-//    }
-//  }
-//}
+extension ReportDetailViewController: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    4
+  }
+
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    switch indexPath.row {
+    case 0:
+      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
+      cell.configue(title: "아침", totalCalory: "\(dailyDetail.breakfastTotalCalory)", foods: dailyDetail.breakfast)
+      return cell
+    case 1:
+      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
+      cell.configue(title: "점심", totalCalory: "\(dailyDetail.lunchTotalCalory)", foods: dailyDetail.lunch)
+      return cell
+      
+    case 2:
+      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
+      cell.configue(title: "저녁", totalCalory: "\(dailyDetail.dinnerTotalCalory)", foods: dailyDetail.dinner)
+      return cell
+    case 3:
+      let cell = tableView.dequeueReusableCell(withIdentifier: ReprotsDetailTableViewCell.identifier, for: indexPath) as! ReprotsDetailTableViewCell
+      cell.configue(title: "간식", totalCalory: "\(dailyDetail.snackTotalCalory)", foods: dailyDetail.snack)
+      return cell
+    default:
+      return UITableViewCell()
+
+    }
+  }
+}

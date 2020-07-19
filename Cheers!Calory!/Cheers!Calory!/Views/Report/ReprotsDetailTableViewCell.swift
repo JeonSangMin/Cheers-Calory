@@ -9,7 +9,7 @@
 import UIKit
 
 class ReprotsDetailTableViewCell: UITableViewCell {
-
+  
   // MARK: -Identifier
   static let identifier = "ReprotsDetailTableViewCell"
   
@@ -18,6 +18,8 @@ class ReprotsDetailTableViewCell: UITableViewCell {
   private let titleLabel = UILabel()
   private let lineView = UIView()
   private let totalCalory = UILabel()
+  private var leftStackView = UIStackView()
+  private var rightStackView = UIStackView()
   
   // MARK: -init
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -38,26 +40,39 @@ class ReprotsDetailTableViewCell: UITableViewCell {
     self.totalCalory.text = totalCalory
   }
   
+  func configue(title: String, totalCalory: String, foods: [Food]) {
+    self.titleLabel.text = title
+    self.totalCalory.text = totalCalory
+
+    leftStackView.removeAllArrangedSubviews()
+    rightStackView.removeAllArrangedSubviews()
+    foods.forEach {
+      let foodName = UILabel()
+      let calory = UILabel()
+      foodName.textColor = ColorZip.purple
+      calory.textColor = ColorZip.purple
+      foodName.text = $0.foodName
+      calory.text = $0.calory
+      leftStackView.addArrangedSubview(foodName)
+      rightStackView.addArrangedSubview(calory)
+    }
+  }
   // MARK: -setupUI
   
   private func setUI() {
     contentView.addSubviews([
-    shadowView,
-    
-    
-    
+      shadowView,
     ])
     
     shadowView.addSubviews([
-    titleLabel,
-    lineView,
-    totalCalory
-    
+      titleLabel,
+      lineView,
+      totalCalory,
+      leftStackView,
+      rightStackView
     ])
     
-//    shadowView.layer.masksToBounds = false
     shadowView.layer.shadowColor = UIColor.black.cgColor
-//    shadowView.layer.shadowOffset = CGSize(width: 0, height: 1.0)
     shadowView.layer.shadowOffset = .zero
     shadowView.layer.shadowOpacity = 0.2
     shadowView.layer.shadowRadius = 4.0
@@ -68,6 +83,16 @@ class ReprotsDetailTableViewCell: UITableViewCell {
       $0.textColor = ColorZip.purple
       $0.font = .systemFont(ofSize: 22, weight: .regular)
     }
+    
+    leftStackView.alignment = .leading
+    rightStackView.alignment = .trailing
+    
+    [leftStackView, rightStackView].forEach {
+      $0.axis = .vertical
+      $0.distribution = .fill
+      $0.spacing = 8
+    }
+    
     setConstraint()
   }
   
@@ -76,9 +101,7 @@ class ReprotsDetailTableViewCell: UITableViewCell {
   private func setConstraint() {
     
     shadowView.snp.makeConstraints {
-//      $0.leading.trailing.top.bottom.equalToSuperview().offset(8)
-      $0.height.equalTo(120)
-      $0.edges.equalToSuperview().offset(10)
+      $0.edges.equalToSuperview().inset(10)
     }
     titleLabel.snp.makeConstraints {
       $0.leading.equalToSuperview().offset(CGFloat.dynamicXMargin(margin: 28))
@@ -90,12 +113,25 @@ class ReprotsDetailTableViewCell: UITableViewCell {
       $0.top.equalTo(titleLabel.snp.bottom).offset(6)
       $0.centerX.equalToSuperview()
     }
+    
+    leftStackView.snp.makeConstraints {
+      $0.top.equalTo(lineView).inset(CGFloat.dynamicYMargin(margin: 10))
+      $0.trailing.equalTo(shadowView.snp.centerX)
+      $0.leading.equalToSuperview().inset(CGFloat.dynamicXMargin(margin: 28))
+      $0.bottom.equalToSuperview().offset(CGFloat.dynamicYMargin(margin: -14))
+    }
+    
+    rightStackView.snp.makeConstraints {
+      $0.top.equalTo(lineView).inset(CGFloat.dynamicYMargin(margin: 10))
+      $0.leading.equalTo(shadowView.snp.centerX)
+      $0.trailing.equalToSuperview().inset(CGFloat.dynamicXMargin(margin: 38))
+    }
+    
     totalCalory.snp.makeConstraints {
       $0.trailing.equalToSuperview().offset(CGFloat.dynamicXMargin(margin: -38))
       $0.top.equalTo(titleLabel.snp.top)
     }
-    
   }
-  
-
 }
+
+
