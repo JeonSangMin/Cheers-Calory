@@ -18,6 +18,7 @@ func setRootView(window: UIWindow) {
     let main = UINavigationController(rootViewController: RecommendedCaloriesViewController())
     let daily = UINavigationController(rootViewController: DailyViewController())
     let record = UINavigationController(rootViewController: ReportViewController())
+//    let record = UINavigationController(rootViewController: ReportDetailViewController())
     
     main.tabBarItem = UITabBarItem(title: "Info", image: UIImage(named: "InfoIcon"), tag: 0)
     daily.tabBarItem = UITabBarItem(title: "Kcal", image: UIImage(named: "Kcal"), tag: 1)

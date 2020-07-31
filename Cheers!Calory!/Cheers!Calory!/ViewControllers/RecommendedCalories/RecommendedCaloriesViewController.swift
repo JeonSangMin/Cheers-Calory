@@ -19,11 +19,7 @@ class RecommendedCaloriesViewController: UIViewController {
   
   
 //  private let caloryView1 = CaloryView()
-  
-  // 수정 테스트~~
-  // 풀리퀘테스트염
-  
-  
+
   // MARK: -Lift cycle
   
   override func viewWillAppear(_ animated: Bool) {
@@ -43,7 +39,7 @@ class RecommendedCaloriesViewController: UIViewController {
   //25 30 35 40
   //평균체중 * 활동지수 = 권장칼로리
   private func readUserDefault() {
-    var 권장칼로리: Double
+//    var 권장칼로리: Double
     guard let data = UserDefaults.standard.data(forKey: "userInfo") else { return }
     if let userInfo = try? JSONDecoder().decode(UserInfo.self, from: data) {
         self.userInfo = userInfo
@@ -53,31 +49,28 @@ class RecommendedCaloriesViewController: UIViewController {
     
     switch userInfo.selectedItem {
     case 0:
-      let calories: Double = userInfo.averageWeight * 25
+      let calories: Double = userInfo.healthyWeight * 25
       let dailyCalories: Double = calories / 10
-      bodyView.configue(weight: String(Int(userInfo.averageWeight)), calories: String(Int(calories)))
+      bodyView.configue(weight: String(Int(userInfo.healthyWeight)), calories: String(Int(calories)))
       bottomView.configue(morning: String(Int(dailyCalories * 3)), lunch: String(Int(dailyCalories * 4)), evening: String(Int(dailyCalories * 2)), snack: String(Int(dailyCalories * 1)))
     case 1:
-      let calories: Double = userInfo.averageWeight * 30
+      let calories: Double = userInfo.healthyWeight * 30
       let dailyCalories: Double = calories / 10
-      bodyView.configue(weight: String(Int(userInfo.averageWeight)), calories: String(Int(calories)))
+      bodyView.configue(weight: String(Int(userInfo.healthyWeight)), calories: String(Int(calories)))
       bottomView.configue(morning: String(Int(dailyCalories * 3)), lunch: String(Int(dailyCalories * 4)), evening: String(Int(dailyCalories * 2)), snack: String(Int(dailyCalories * 1)))
     case 2:
-      let calories: Double = userInfo.averageWeight * 35
+      let calories: Double = userInfo.healthyWeight * 35
       let dailyCalories: Double = calories / 10
-      bodyView.configue(weight: String(Int(userInfo.averageWeight)), calories: String(Int(calories)))
+      bodyView.configue(weight: String(Int(userInfo.healthyWeight)), calories: String(Int(calories)))
       bottomView.configue(morning: String(Int(dailyCalories * 3)), lunch: String(Int(dailyCalories * 4)), evening: String(Int(dailyCalories * 2)), snack: String(Int(dailyCalories * 1)))
     case 3:
-      let calories: Double = userInfo.averageWeight * 40
+      let calories: Double = userInfo.healthyWeight * 40
       let dailyCalories: Double = calories / 10
-      bodyView.configue(weight: String(Int(userInfo.averageWeight)), calories: String(Int(calories)))
+      bodyView.configue(weight: String(Int(userInfo.healthyWeight)), calories: String(Int(calories)))
       bottomView.configue(morning: String(Int(dailyCalories * 3)), lunch: String(Int(dailyCalories * 4)), evening: String(Int(dailyCalories * 2)), snack: String(Int(dailyCalories * 1)))
     default:
-      print("Default?가 나왔습니다")
+      break
     }
-    
-    print(userInfo.height)
-    print(userInfo.bmi)
   }
   
   // MARK: -setupUI

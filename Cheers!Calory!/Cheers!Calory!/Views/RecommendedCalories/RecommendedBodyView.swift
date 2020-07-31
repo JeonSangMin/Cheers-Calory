@@ -35,9 +35,9 @@ class RecommendedBodyView: UIView {
   // MARK: -Action
   
   func configue(weight: String, calories: String) {
-    averageWeight.text = "My average weight"
+    averageWeight.text = "내 키의 적정몸무게"
     averageWeightLabel.text = "  \(weight)kg  "
-    recommendedCalories.text = "My Daily Calories"
+    recommendedCalories.text = "일일권장섭취량"
     recommendedCaloriesLabel.text = " \(calories)kcal "
     
 //    My Daily Recommended Calories

@@ -19,10 +19,13 @@ struct UserInfo: Codable {
     var height: Double = 0
     var weight: Double = 0
     var today: String = ""
-    var bmi: Double {
-        return weight / (0.01 * height) / (0.01 * height)
-    }
-    var averageWeight: Double {
-        return (0.01 * height) * (0.01 * height) * bmi
+//    var bmi: Double {
+//        return weight / (0.01 * height) / (0.01 * height)
+//    }
+//    var averageWeight: Double {
+//        return (0.01 * height) * (0.01 * height) * bmi
+//    }
+    var healthyWeight: Double {
+        return (height - 100) * 0.9
     }
 }

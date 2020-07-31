@@ -24,7 +24,7 @@ class SearchViewController: UIViewController {
     private let searchController = UISearchController(searchResultsController: nil)
     let tableView = UITableView()
     
-//    private var dailyCaloric = DailyCaloricIntake()
+    //    private var dailyCaloric = DailyCaloricIntake()
     private var data = [Food]()
     private var filteredDatas = [Food]()
     
@@ -119,22 +119,28 @@ extension SearchViewController {
         guard let dailyVC = navi.viewControllers.first as? DailyViewController else { return print("데일리 없음")}
         
         ref.child("product").child(barcode).observeSingleEvent(of: .value, with: { (DataSnapshot) in
-            let value = DataSnapshot.value as? NSDictionary
-            let food = Food(foodName: value?["제품명"] as? String ?? "없음",
-                            servingSize: value?["상품분류"] as? String ?? "0",
-                            calory: value?["원산지"] as? String ?? "0",
-                            carbohydrate: "0", fat: "0", protein: "0")
             
-            switch self.section {
-            case 0: DailyIntakeDB.shared.todayIntake.breakfast.append(food)
-            case 1: DailyIntakeDB.shared.todayIntake.lunch.append(food)
-            case 2: DailyIntakeDB.shared.todayIntake.dinner.append(food)
-            case 3: DailyIntakeDB.shared.todayIntake.snack.append(food)
-            default: print("안됨")
+            if let value = DataSnapshot.value as? NSDictionary {
+                let food = Food(foodName: value["제품명"] as! String,
+                                servingSize: value["상품분류"] as! String,
+                                calory: value["원산지"] as! String,
+                                carbohydrate: "0", fat: "0", protein: "0")
+                
+                switch self.section {
+                case 0: DailyIntakeDB.shared.todayIntake.breakfast.append(food)
+                case 1: DailyIntakeDB.shared.todayIntake.lunch.append(food)
+                case 2: DailyIntakeDB.shared.todayIntake.dinner.append(food)
+                case 3: DailyIntakeDB.shared.todayIntake.snack.append(food)
+                default: print("안됨")
+                
+                dailyVC.tableView.reloadData()
+                }
+            } else {
+                let alert = UIAlertController(title: "정보 없음", message: "해당 음식에 대한 정보가 없습니다", preferredStyle: .alert)
+                let check = UIAlertAction(title: "확인", style: .default, handler: nil)
+                alert.addAction(check)
+                dailyVC.present(alert, animated: true, completion: nil)
             }
-            
-            
-            dailyVC.tableView.reloadData()
             
         }) { (error) in
             print(error.localizedDescription)
@@ -199,6 +205,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
         dailyVC.totalCalory =  DailyIntakeDB.shared.todayIntake.totalCalory
         dailyVC.tableView.reloadData()
+        
     }
     
 }

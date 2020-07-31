@@ -24,24 +24,26 @@ class DailyViewController: UIViewController {
         return tableView
     }()
     
-    private var today = Date()
+    //    private var today = Date()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "Daily"
         view.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = CGFloat.dynamicYMargin(margin: 60)
         
-        
+        setNavigationBar()
         setUI()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         tableView.reloadData()
-        // 여기서 데이터 저장
     }
     
     private func setTableView() {
@@ -51,8 +53,13 @@ class DailyViewController: UIViewController {
     }
     
     private func setNavigationBar() {
+        navigationController?.isNavigationBarHidden = false
         navigationItem.title = "Daily"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "pencil"), style: .plain, target: self, action: #selector(didTapWritButton(_:)))
+        self.navigationController?.navigationBar.tintColor = UIColor.black
     }
+    
+    
     
     private func setUI() {
         view.backgroundColor = .white
@@ -74,6 +81,13 @@ class DailyViewController: UIViewController {
             $0.top.equalTo(headerView.snp.bottom).offset(CGFloat.dynamicYMargin(margin: 15))
             $0.leading.trailing.bottom.equalTo(guide)
         }
+    }
+    
+    @objc private func didTapWritButton(_ sender: UIButton) {
+        let writeVC = WriteViewController()
+        
+        let navi = UINavigationController(rootViewController: writeVC)
+        present(navi, animated: true, completion: nil)
     }
 }
 
@@ -146,13 +160,13 @@ extension DailyViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch section {
         case 0:
-            view.foodLabel.text = "아침" as String
+            view.foodLabel.text = "아침"
         case 1:
-            view.foodLabel.text = "점심" as String
+            view.foodLabel.text = "점심"
         case 2:
-            view.foodLabel.text = "저녁" as String
+            view.foodLabel.text = "저녁"
         case 3:
-            view.foodLabel.text = "간식" as String
+            view.foodLabel.text = "간식"
         default:
             break
         }
@@ -180,7 +194,7 @@ extension DailyViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
     }
     
-    // 수정
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var detail: Food?
         
@@ -197,15 +211,23 @@ extension DailyViewController: UITableViewDataSource, UITableViewDelegate {
             break
         }
         
-        let foodDetailVC = FoodDetailViewController(detail: detail!)
-        foodDetailVC.modalTransitionStyle = .crossDissolve
-//        foodDetailVC.isModalInPresentation = true
-//        foodDetailVC.modalPresentationStyle = .popover
-        self.present(foodDetailVC, animated: true, completion: {
-            // 모달형식의 ViewController 내려서 끌 수 없도록 막음
-            foodDetailVC.presentationController?.presentedView?.gestureRecognizers?[0].isEnabled = false
-        })
-
+        if (detail?.servingSize.contains("가공"))! {
+            let productDetailVC = ProductDetailViewController(detail: detail!)
+            productDetailVC.modalTransitionStyle = .crossDissolve
+            
+            self.present(productDetailVC, animated: true, completion: {
+                productDetailVC.presentationController?.presentedView?.gestureRecognizers?[0].isEnabled = false
+            })
+        } else {
+            let foodDetailVC = FoodDetailViewController(detail: detail!)
+            foodDetailVC.modalTransitionStyle = .crossDissolve
+            
+            self.present(foodDetailVC, animated: true, completion: {
+                // 모달형식의 ViewController 내려서 끌 수 없도록 막음
+                foodDetailVC.presentationController?.presentedView?.gestureRecognizers?[0].isEnabled = false
+            })
+        }
+        
         tableView.reloadData()
     }
     
@@ -230,6 +252,7 @@ extension DailyViewController: DailySectionHeaderViewDelegate {
         let navi = UINavigationController(rootViewController: searchVC)
         present(navi, animated: true, completion: nil)
     }
+    
     
     
 }

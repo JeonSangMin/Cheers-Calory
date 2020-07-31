@@ -27,7 +27,7 @@ class DailySectionHeaderView: UIView {
         button.tintColor = .white
         button.setImage(plusImage, for: .normal)
         button.setPreferredSymbolConfiguration(.init(scale: .default), forImageIn: .normal)
-        button.addTarget(self, action: #selector(didplusButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapPlusButton), for: .touchUpInside)
         return button
     }()
     
@@ -43,7 +43,7 @@ class DailySectionHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc private func didplusButton(_ sender: UIButton) {
+    @objc private func didTapPlusButton(_ sender: UIButton) {
         delegate?.didTapPlusButton(section: section)
     }
     

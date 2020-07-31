@@ -169,9 +169,9 @@ extension CGFloat {
 
 //MARK: UIView Extensions
 extension UIView {
-  func addSubviews(_ views: [UIView]) {
-    views.forEach { addSubview($0) }
-  }
+    func addSubviews(_ views: [UIView]) {
+        views.forEach { addSubview($0) }
+    }
 }
 
 extension UIFont {
@@ -186,3 +186,34 @@ extension UIFont {
     }
 }
 
+extension UIResponder {
+    // MARK: view에서 view 자신이 addSubView 되어있는 viewController에 접근하고 싶을 때 사용함
+    // ex) writeView는 WriteViewController가 가지고 있음, writeView에서 VC의 NavigationController에 접근해야 할 때 사용할 수 있음
+    func getOwningViewController() -> UIViewController? {
+        var nextResponser = self
+        while let next = nextResponser.next {
+            nextResponser = next
+            if let viewController = nextResponser as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
+    }
+}
+
+extension UIStackView {
+    
+    func removeAllArrangedSubviews() {
+        
+        let removedSubviews = arrangedSubviews.reduce([]) { (allSubviews, subview) -> [UIView] in
+            self.removeArrangedSubview(subview)
+            return allSubviews + [subview]
+        }
+        
+        // Deactivate all constraints
+        NSLayoutConstraint.deactivate(removedSubviews.flatMap({ $0.constraints }))
+        
+        // Remove the views from self
+        removedSubviews.forEach({ $0.removeFromSuperview() })
+    }
+}

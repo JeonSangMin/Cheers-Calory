@@ -45,16 +45,4 @@ class DailyHeaderView: UIView {
             $0.centerY.centerX.equalTo(self)
         }
     }
-    
-//    private func setKcalStr() {
-//        guard let data = UserDefaults.standard.data(forKey: "DB") else { return }
-//        if let totalKcal = try? JSONDecoder().decode([DailyCaloricIntake].self, from: data) {
-//            if totalKcal.last?.today == Date.dateFormatting(yyyyMMDD: "yyyyMMdd") {
-//                self.totalCal = totalKcal.last?.totalCalory ?? 0
-//            } else {
-//                self.totalCal = 0
-//            }
-//        }
-//    }
-    
 }

@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol DailyDetailDelegate {
-    func sendDetail(detail: Food?)
-}
-
 class FoodDetailViewController: UIViewController {
     var dailyIntakeDetail: Food?
     
@@ -60,7 +56,7 @@ class FoodDetailViewController: UIViewController {
         }
         
         circleView.layer.cornerRadius = circleView.frame.width / 2
-        checkButton.layer.addBorder([.top], color: ColorZip.lightGray, width: 1)
+        checkButton.layer.addBorder([.top], color: ColorZip.lightGray, width: 0.5)
     }
     
     // 델리게이트 패턴으로 레이블 타이틀 전달해줄것
@@ -87,8 +83,6 @@ class FoodDetailViewController: UIViewController {
             circleView.addSubview($0)
         }
         
-        // 은영이는 바보라네
-        
         foodTitle.text = dailyIntakeDetail?.foodName
         foodTitle.font = UIFont.dynamicFont(fontSize: 18, weight: .bold)
         totalCal.text = dailyIntakeDetail?.calory
@@ -103,7 +97,7 @@ class FoodDetailViewController: UIViewController {
         circleView.layer.borderColor = ColorZip.purple.cgColor
         
         if let detail = dailyIntakeDetail {
-            servingSizeLabel.text = "1회제공량 \(detail.servingSize)g"
+            servingSizeLabel.text = "섭취량 \(detail.servingSize)g"
             proteinLabel.text = "단백질 \(detail.protein)g"
             fatLabel.text = "지방 \(detail.fat)g"
             carbohydrateLabel.text = "탄수화물 \(detail.carbohydrate)g"

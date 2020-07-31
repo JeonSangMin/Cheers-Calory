@@ -19,7 +19,7 @@ struct DailyIntakeDB: Codable {
     var todayIntake = DailyCaloricIntake() {
         didSet {
             let key = todayIntake.today
-            print("didset:", key)
+            print("오늘식단변동:", key)
             UserDefaults.standard.set(try? JSONEncoder().encode(todayIntake), forKey: key)
         }
     }
@@ -33,6 +33,12 @@ struct DailyIntakeDB: Codable {
     
     func getDailyIntake(index: Int) -> DailyCaloricIntake? {
         let key = keyList[index]
+        guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
+        let dailyIntake = try? JSONDecoder().decode(DailyCaloricIntake.self, from: data)
+        return dailyIntake
+    }
+    
+    func getDailyIntake(key: String) -> DailyCaloricIntake? {
         guard let data = UserDefaults.standard.data(forKey: key) else { return nil }
         let dailyIntake = try? JSONDecoder().decode(DailyCaloricIntake.self, from: data)
         return dailyIntake
@@ -60,6 +66,6 @@ struct DailyIntakeDB: Codable {
 }
 
 enum Keys: String {
-    case date = "yyyyMMddHH"
+    case date = "yyyy년 MM월 dd일"
     case keyList
 }
