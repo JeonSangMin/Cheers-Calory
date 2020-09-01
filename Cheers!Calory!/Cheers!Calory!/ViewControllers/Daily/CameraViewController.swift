@@ -139,6 +139,11 @@ class CameraViewController: UIViewController,AVCaptureMetadataOutputObjectsDeleg
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        guard let tabbar = self.presentingViewController as? UITabBarController else { return print("0000") }
+        guard let navi = tabbar.viewControllers?[2] as? UINavigationController else {return print("1111")}
+        guard let dailyVC = navi.viewControllers.first as? DailyViewController else { return print("222")}
+        
+        dailyVC.tableView.reloadData()
         // 뷰가 사라질 때 captureSession이 동작중이면 종료
         if (captureSession.isRunning == true) {
             captureSession.stopRunning()

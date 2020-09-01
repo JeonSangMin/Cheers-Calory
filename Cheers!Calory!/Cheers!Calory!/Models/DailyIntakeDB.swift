@@ -15,7 +15,7 @@ struct DailyIntakeDB: Codable {
         setDailyIntakeDBObject()
     }
     
-    // 투데이에 변동이 생기면 유저디폴트에 저장
+    // 오늘 식단에 변동이 생기면, 날짜를 키로해서 저장
     var todayIntake = DailyCaloricIntake() {
         didSet {
             let key = todayIntake.today
